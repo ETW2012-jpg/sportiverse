@@ -6,30 +6,24 @@
 <title>Sportiverse - 3D Sports Games</title>
 <style>
   :root {
-    --bg: #0d1220;
-    --panel: #161d30;
-    --panel2: #1c2440;
-    --ink: #eef2f8;
-    --muted: #8b94a7;
-    --line: #26304d;
-    --accent: #2dd4a8;
-    --accent2: #ffb02e;
-    --radius: 18px;
+    --bg: #0d1220; --panel: #161d30; --panel2: #1c2440; --ink: #eef2f8;
+    --muted: #8b94a7; --line: #26304d; --accent: #2dd4a8; --accent2: #ffb02e; --radius: 18px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg); color: var(--ink); overflow-x: hidden;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
   button { font-family: inherit; }
+  button, input, select { font-size: 15px; }
 
-  /* HUB */
   #hub { max-width: 1060px; margin: 0 auto; padding: 0 22px 70px; }
-  .top { display: flex; align-items: center; gap: 14px; padding: 26px 0 8px; }
+  .top { display: flex; align-items: center; gap: 14px; padding: 26px 0 8px; flex-wrap: wrap; }
   .logo { width: 46px; height: 46px; flex-shrink: 0; }
   .top h1 { font-size: 26px; letter-spacing: -0.5px; }
   .top .tag { color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  .mpbtns { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .mpbtn { background: none; border: 1.5px solid var(--line); color: var(--accent); border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .mpbtn:hover { border-color: var(--accent); }
+  .mpbtn:disabled { opacity: 0.4; cursor: default; }
   .intro {
     background: linear-gradient(135deg, #1a2440, #141b30);
     border: 1px solid var(--line); border-radius: var(--radius);
@@ -53,7 +47,6 @@
     border-radius: 20px; padding: 3px 10px;
   }
   .card.locked { opacity: 0.5; cursor: default; }
-  .card.locked:hover { transform: none; border-color: var(--line); background: var(--panel); }
   .card .soon {
     position: absolute; top: 14px; right: 14px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px;
     text-transform: uppercase; color: var(--accent2); background: rgba(255,176,46,0.1);
@@ -61,7 +54,6 @@
   }
   footer { text-align: center; color: var(--muted); font-size: 12.5px; padding: 34px 20px 10px; }
 
-  /* GAME VIEW */
   #game { display: none; position: fixed; inset: 0; background: #000; }
   #c { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
   #hud {
@@ -69,71 +61,75 @@
     padding: 10px 14px; pointer-events: none;
     background: linear-gradient(rgba(5,8,16,0.65), rgba(5,8,16,0));
   }
-  #hudName { font-weight: 800; font-size: 15px; letter-spacing: -0.2px; }
+  #hudName { font-weight: 800; font-size: 15px; }
   #hudScore { font-weight: 800; font-size: 22px; color: var(--accent); margin-left: 6px; font-variant-numeric: tabular-nums; }
   #hudInfo { color: #b9c2d4; font-size: 13px; font-weight: 600; margin-left: 10px; }
-  #hudMsg {
-    position: absolute; left: 0; right: 0; top: 34%; text-align: center; font-size: 30px; font-weight: 800;
-    letter-spacing: -0.5px; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,0.6); opacity: 0; pointer-events: none;
-  }
+  #hudMsg { position: absolute; left: 0; right: 0; top: 34%; text-align: center; font-size: 30px; font-weight: 800; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,0.6); opacity: 0; pointer-events: none; }
   #hudMsg.pop { animation: msgpop 1.1s ease forwards; }
   @keyframes msgpop { 0% { opacity: 0; transform: scale(0.7); } 15% { opacity: 1; transform: scale(1.06); } 30% { transform: scale(1); } 75% { opacity: 1; } 100% { opacity: 0; } }
   .hud-right { margin-left: auto; display: flex; align-items: center; gap: 10px; pointer-events: auto; }
   #hudBest { color: var(--muted); font-size: 13px; font-weight: 600; }
-  #exitBtn {
-    background: rgba(255,255,255,0.08); color: #dfe6f2; border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 10px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer;
-  }
-  #exitBtn:hover { background: rgba(255,255,255,0.15); }
-
-  #powerWrap {
-    position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%);
-    width: 240px; height: 14px; background: rgba(255,255,255,0.12); border-radius: 8px;
-    display: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);
-  }
+  #exitBtn { background: rgba(255,255,255,0.08); color: #dfe6f2; border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  #powerWrap { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); width: 240px; height: 14px; background: rgba(255,255,255,0.12); border-radius: 8px; display: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
   #powerBar { height: 100%; width: 0%; background: linear-gradient(90deg, #2dd4a8, #ffb02e, #ff5c5c); border-radius: 8px; }
 
-  /* TOUCH CONTROLS */
-  #touchUI { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px; display: none; justify-content: space-between; align-items: flex-end; pointer-events: none; }
-  .tbtn {
-    pointer-events: auto; width: 74px; height: 74px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25); color: #fff;
-    font-size: 15px; font-weight: 800; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: none;
+  #touchUI { position: absolute; inset: 0; display: none; pointer-events: none; }
+  #stickZone {
+    pointer-events: auto; position: absolute; left: 18px; bottom: 24px; width: 150px; height: 150px;
+    border-radius: 50%; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.18);
+    touch-action: none; user-select: none; -webkit-user-select: none;
   }
-  .tbtn:active { background: rgba(255,255,255,0.22); }
-  .tgroup { display: flex; gap: 14px; }
-  #actBtn { width: 92px; height: 92px; background: rgba(45,212,168,0.2); border-color: rgba(45,212,168,0.5); }
+  #stickKnob {
+    position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px;
+    border-radius: 50%; background: rgba(45,212,168,0.35); border: 2px solid rgba(45,212,168,0.7); pointer-events: none;
+  }
+  #actBtn {
+    pointer-events: auto; position: absolute; right: 22px; bottom: 44px; width: 96px; height: 96px; border-radius: 50%;
+    background: rgba(45,212,168,0.2); border: 2px solid rgba(45,212,168,0.55); color: #fff;
+    font-size: 16px; font-weight: 800; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: none;
+  }
+  #actBtn:active { background: rgba(45,212,168,0.4); }
 
-  /* OVERLAY */
-  #overlay {
+  #overlay, #lobby {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    background: rgba(6,9,18,0.72); backdrop-filter: blur(6px); z-index: 5;
+    background: rgba(6,9,18,0.72); backdrop-filter: blur(6px); z-index: 5; padding: 20px;
   }
-  #overlay.hidden { display: none; }
+  #overlay.hidden, #lobby.hidden { display: none; }
   .panel {
     background: var(--panel); border: 1px solid var(--line); border-radius: 22px;
-    padding: 30px 34px; width: min(430px, calc(100vw - 40px)); text-align: center;
-    box-shadow: 0 24px 70px rgba(0,0,0,0.5);
+    padding: 28px 30px; width: min(460px, 100%); text-align: center;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.5); max-height: 92vh; overflow-y: auto;
   }
   .panel h2 { font-size: 24px; letter-spacing: -0.4px; margin-bottom: 8px; }
   .panel .ptext { color: #b9c2d4; font-size: 14px; line-height: 1.65; margin-bottom: 6px; white-space: pre-line; }
   .panel .pbig { font-size: 34px; font-weight: 800; color: var(--accent); margin: 10px 0 2px; font-variant-numeric: tabular-nums; }
-  .panel .pbest { color: var(--accent2); font-weight: 700; font-size: 14px; min-height: 20px; margin-bottom: 14px; }
-  .pbtns { display: flex; gap: 10px; justify-content: center; }
-  .pbtn {
-    border: none; border-radius: 13px; padding: 12px 26px; font-size: 15px; font-weight: 700; cursor: pointer;
-  }
+  .panel .pbest { color: var(--accent2); font-weight: 700; font-size: 14px; min-height: 20px; margin: 4px 0; }
+  .pbtns { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .pbtn { border: none; border-radius: 13px; padding: 12px 26px; font-size: 15px; font-weight: 700; cursor: pointer; }
   .pbtn.main { background: var(--accent); color: #06281f; }
   .pbtn.main:hover { filter: brightness(1.1); }
   .pbtn.ghost { background: none; border: 1.5px solid var(--line); color: var(--muted); }
   .pbtn.ghost:hover { color: var(--ink); }
   .keysrow { display: flex; gap: 6px; justify-content: center; margin: 12px 0 4px; flex-wrap: wrap; }
-  .kbd {
-    background: #101627; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 8px;
-    padding: 5px 10px; font-size: 12.5px; font-weight: 700; color: #c6cedd;
+  .kbd { background: #101627; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 8px; padding: 5px 10px; font-size: 12.5px; font-weight: 700; color: #c6cedd; }
+  .selrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 9px 0; }
+  .selrow label { color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  .sel, .panel input {
+    background: #101627; border: 1px solid var(--line); border-radius: 10px; color: var(--ink);
+    padding: 9px 12px; font-weight: 600; min-width: 150px;
   }
+  #lbStep1 .lrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 14px 0; }
+  #lbStep1 label { color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  #lbCode { font-size: 38px; font-weight: 800; letter-spacing: 10px; color: var(--accent); margin: 10px 0 4px; text-indent: 10px; }
+  #lbPlayers { text-align: left; margin: 10px auto 4px; max-width: 300px; }
+  #lbPlayers .prow { display: flex; align-items: center; gap: 9px; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+  #lbPlayers .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  #lbPlayers .htag { margin-left: auto; font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px; color: var(--accent2); }
+  #lbHostTools { margin-top: 10px; }
+  .mpnote { color: var(--muted); font-size: 12px; margin-top: 10px; line-height: 1.5; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 
@@ -148,18 +144,20 @@
       <h1>Sportiverse</h1>
       <div class="tag">3D sports games - all in one place</div>
     </div>
+    <div class="mpbtns">
+      <button id="createBtn" class="mpbtn">Create Room</button>
+      <button id="joinBtn" class="mpbtn">Join Room</button>
+    </div>
   </div>
 
   <div class="intro">
-    <b>Pick a sport and play.</b> Every game is in real 3D, saves your best score on this device, and works with a keyboard or touch screen. More sports are being added - the full collection is coming together one game at a time.
+    <b>Pick a sport and play.</b> Everything runs in real 3D and saves your best scores on this device. Made for iPad: a joystick and buttons appear on screen during every game. Or tap Create Room, share the code with friends, and race them live online.
   </div>
 
   <h2 class="section">Play now</h2>
   <div class="grid" id="liveGrid"></div>
-
   <h2 class="section">In the works</h2>
   <div class="grid" id="soonGrid"></div>
-
   <footer>Sportiverse - made by pupils, for pupils</footer>
 </div>
 
@@ -177,17 +175,16 @@
   <div id="hudMsg"></div>
   <div id="powerWrap"><div id="powerBar"></div></div>
   <div id="touchUI">
-    <div class="tgroup" id="steerGroup">
-      <button class="tbtn" id="btnL">L</button>
-      <button class="tbtn" id="btnR">R</button>
-    </div>
-    <button class="tbtn" id="actBtn">GO</button>
+    <div id="stickZone"><div id="stickKnob"></div></div>
+    <button id="actBtn">GO</button>
   </div>
+
   <div id="overlay">
     <div class="panel">
       <h2 id="ovTitle"></h2>
       <div class="ptext" id="ovText"></div>
       <div class="keysrow" id="ovKeys"></div>
+      <div id="ovOpts"></div>
       <div class="pbig" id="ovBig" style="display:none"></div>
       <div class="pbest" id="ovBest"></div>
       <div class="pbtns">
@@ -196,1094 +193,41 @@
       </div>
     </div>
   </div>
+
+  <div id="lobby" class="hidden">
+    <div class="panel">
+      <h2 id="lbTitle">Multiplayer</h2>
+      <div id="lbStep1">
+        <div class="lrow"><label>Your name</label><input id="lbName" maxlength="12" placeholder="e.g. Sam"></div>
+        <div class="lrow" id="lbCodeRow" style="display:none"><label>Room code</label><input id="lbCodeIn" maxlength="5" placeholder="ABC12" autocapitalize="characters"></div>
+        <div class="pbtns">
+          <button class="pbtn main" id="lbGo">Go</button>
+          <button class="pbtn ghost" id="lbCancel">Cancel</button>
+        </div>
+        <div class="pbest" id="lbErr"></div>
+      </div>
+      <div id="lbStep2" style="display:none">
+        <div class="ptext">Share this code with your friends:</div>
+        <div id="lbCode">-----</div>
+        <div id="lbPlayers"></div>
+        <div id="lbHostTools">
+          <div class="selrow"><label>Game</label><select id="lbGame" class="sel"></select></div>
+          <div id="lbOpts"></div>
+        </div>
+        <div class="ptext" id="lbWait" style="display:none">Waiting for the host to start the game.</div>
+        <div class="mpnote">Everyone keeps this page open. Connects through a free peer server - the first connection can take a few seconds. If the host leaves, the room closes.</div>
+        <div class="pbtns">
+          <button class="pbtn main" id="lbStart">Start</button>
+          <button class="pbtn ghost" id="lbLeave">Leave room</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script>
-"use strict";
-var $ = function(id){ return document.getElementById(id); };
-
-if (typeof THREE === "undefined"){
-  $("liveGrid").innerHTML = '<div class="card"><h3>3D library did not load</h3><p>Check the internet connection and refresh the page.</p></div>';
-  throw new Error("three.js failed to load");
-}
-
-function fmtInt(v){ return String(Math.round(v)); }
-function fmtTime(v){ return Number(v).toFixed(2) + "s"; }
-function rand(a, b){ return a + Math.random() * (b - a); }
-function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
-
-var ICO = {
-  ski: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l6-11 4 7 3-5 5 9"/><circle cx="18" cy="4" r="2" fill="#ffb02e" stroke="none"/></svg>',
-  ball: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><path d="M5.6 5.6c3.5 2 9.3 2 12.8 0M5.6 18.4c3.5-2 9.3-2 12.8 0"/></svg>',
-  hoop: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6L6 18"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>',
-  tennis: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L21 21"/><circle cx="19" cy="6" r="2.5" fill="#ffb02e" stroke="none"/></svg>',
-  target: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="#ffb02e" stroke="none"/></svg>',
-  wave: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2" stroke-linecap="round"><path d="M2 16c3-6 7-6 10 0s7 6 10 0"/><path d="M6 10c2-3 5-4 8-3"/></svg>',
-  belt: '<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4a8" stroke-width="2"><path d="M2 9h20v6H2z"/><path d="M9 9v6M15 9v6"/><rect x="10" y="10.5" width="4" height="3" fill="#ffb02e" stroke="none"/></svg>'
-};
-
-function getBest(id){
-  try { var v = localStorage.getItem("sa_best_" + id); return v === null ? null : Number(v); } catch(e){ return null; }
-}
-function saveBest(id, v){
-  try { localStorage.setItem("sa_best_" + id, String(v)); } catch(e){}
-}
-
-var AC = null;
-function sfx(freq, dur, type, vol, slide){
-  try {
-    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
-    if (AC.state === "suspended") AC.resume();
-    var t0 = AC.currentTime;
-    var o = AC.createOscillator();
-    var g = AC.createGain();
-    o.type = type || "square";
-    o.frequency.setValueAtTime(freq, t0);
-    if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, freq + slide), t0 + dur);
-    g.gain.setValueAtTime(vol || 0.12, t0);
-    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
-    o.connect(g);
-    g.connect(AC.destination);
-    o.start(t0);
-    o.stop(t0 + dur + 0.02);
-  } catch(e){}
-}
-
-function mat(color, rough){
-  return new THREE.MeshStandardMaterial({ color: color, roughness: rough === undefined ? 0.85 : rough, metalness: 0 });
-}
-function box(w, h, d, color, rough){
-  var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color, rough));
-  m.castShadow = true;
-  return m;
-}
-function ball(r, color, rough){
-  var m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 16), mat(color, rough));
-  m.castShadow = true;
-  return m;
-}
-function cyl(rt, rb, h, color, rough){
-  var m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 14), mat(color, rough));
-  m.castShadow = true;
-  return m;
-}
-function newScene(sky, fogNear, fogFar){
-  var scene = new THREE.Scene();
-  scene.background = new THREE.Color(sky);
-  scene.fog = new THREE.Fog(sky, fogNear, fogFar);
-  var hemi = new THREE.HemisphereLight(0xffffff, 0x33415a, 0.85);
-  scene.add(hemi);
-  var sun = new THREE.DirectionalLight(0xffffff, 0.9);
-  sun.position.set(18, 36, 14);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
-  sun.shadow.camera.left = -45;
-  sun.shadow.camera.right = 45;
-  sun.shadow.camera.top = 45;
-  sun.shadow.camera.bottom = -45;
-  sun.shadow.camera.near = 1;
-  sun.shadow.camera.far = 130;
-  scene.add(sun);
-  scene.userData.sun = sun;
-  return scene;
-}
-function ground(scene, size, color){
-  var g = new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat(color, 1));
-  g.rotation.x = -Math.PI / 2;
-  g.receiveShadow = true;
-  scene.add(g);
-  return g;
-}
-
-var canvas = $("c");
-var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputEncoding = THREE.sRGBEncoding;
-
-function resize(){
-  var w = window.innerWidth, h = window.innerHeight;
-  renderer.setSize(w, h, false);
-  if (E.cam){
-    E.cam.aspect = w / h;
-    E.cam.updateProjectionMatrix();
-  }
-}
-window.addEventListener("resize", resize);
-
-var E = {
-  scene: null, cam: null, game: null, id: null, def: null,
-  running: false, score: 0, fmt: fmtInt, lowerBetter: false,
-  keys: {},
-  setScore: function(v){
-    E.score = v;
-    $("hudScore").textContent = E.fmt(v);
-  },
-  addScore: function(d){ E.setScore(E.score + d); },
-  setInfo: function(t){ $("hudInfo").textContent = t || ""; },
-  message: function(t){
-    var m = $("hudMsg");
-    m.textContent = t;
-    m.classList.remove("pop");
-    void m.offsetWidth;
-    m.classList.add("pop");
-  },
-  power: function(p){
-    var w = $("powerWrap");
-    if (p === null || p === undefined){ w.style.display = "none"; return; }
-    w.style.display = "block";
-    $("powerBar").style.width = Math.round(clamp(p, 0, 1) * 100) + "%";
-  },
-  gameOver: function(score){
-    if (!E.running) return;
-    E.running = false;
-    E.power(null);
-    var b = getBest(E.id);
-    var isBest = b === null || (E.lowerBetter ? score < b : score > b);
-    if (isBest){ saveBest(E.id, score); b = score; }
-    sfx(isBest ? 880 : 200, 0.45, "square", 0.12, isBest ? 300 : -80);
-    $("ovTitle").textContent = E.def.over || "Run over";
-    $("ovText").textContent = "";
-    $("ovKeys").innerHTML = "";
-    $("ovBig").style.display = "block";
-    $("ovBig").textContent = E.fmt(score);
-    $("ovBest").textContent = isBest ? "New best score!" : "Best: " + E.fmt(b);
-    $("ovPlay").textContent = "Play again";
-    $("overlay").classList.remove("hidden");
-  }
-};
-
-var GAMES = {
-  ski: {
-    name: "Alpine Ski",
-    tag: "Endless slalom. Weave the gates, dodge the trees, do not crash.",
-    how: "Steer with the arrow keys or A and D.\nGo through gates for +10 points.\nMiss 3 gates or hit a tree and the run ends.\nSpeed builds the longer you survive.",
-    keys: ["Left / Right", "A / D"],
-    touch: { steer: true, act: null },
-    fmt: fmtInt, over: "Run over",
-    icon: ICO.ski, create: createSki
-  },
-  penalties: {
-    name: "Penalty Shootout",
-    tag: "Five shots. Pick your corner, time your power, beat the keeper.",
-    how: "Aim with the arrow keys or drag on the pitch.\nHold Space to charge the power bar, release to shoot.\nFive shots - score as many as you can.\nFull power flies over the bar.",
-    keys: ["Arrows", "Hold Space"],
-    touch: { steer: false, act: "KICK" },
-    fmt: fmtInt, over: "Full time",
-    icon: ICO.ball, create: createPenalties
-  },
-  basketball: {
-    name: "Basketball Arcade",
-    tag: "60 seconds on the clock. Swish from anywhere, chain streaks.",
-    how: "The ball swings side to side.\nHold Space to charge, release to shoot.\nPower controls distance. Deep shots are worth 3.\nStreaks multiply your points. 60 seconds on the clock.",
-    keys: ["Hold Space"],
-    touch: { steer: false, act: "SHOOT" },
-    fmt: fmtInt, over: "Time up",
-    icon: ICO.hoop, create: createBasketball
-  },
-  sprint: {
-    name: "100m Sprint Hurdles",
-    tag: "Alternate taps to build speed, jump the hurdles, beat the clock.",
-    how: "Tap Left and Right alternately (or A and D) to build speed.\nSpace to jump.\nTen hurdles - clip one and you lose your speed.\nFastest time to 100m wins.",
-    keys: ["L / R alternate", "Space jump"],
-    touch: { steer: true, act: "JUMP" },
-    fmt: fmtTime, lowerBetter: true, over: "Finish",
-    icon: ICO.clock, create: createSprint
-  },
-  tennis: { name: "Tennis", tag: "Rally against the machine.", comingSoon: true, icon: ICO.tennis },
-  archery: { name: "Archery", tag: "Wind, distance, gold rings.", comingSoon: true, icon: ICO.target },
-  surfing: { name: "Surfing", tag: "Ride the wave, chain tricks.", comingSoon: true, icon: ICO.wave },
-  karate: { name: "Karate", tag: "Timing, focus, points.", comingSoon: true, icon: ICO.belt }
-};
-
-function renderHub(){
-  var live = $("liveGrid"), soon = $("soonGrid");
-  live.innerHTML = "";
-  soon.innerHTML = "";
-  Object.keys(GAMES).forEach(function(id){
-    var g = GAMES[id];
-    var card = document.createElement("div");
-    card.className = "card" + (g.comingSoon ? " locked" : "");
-    var html = '<div class="icone">' + g.icon + '</div><h3>' + g.name + '</h3><p>' + g.tag + '</p>';
-    if (!g.comingSoon){
-      var b = getBest(id);
-      if (b !== null) html += '<div class="bestchip">Best: ' + g.fmt(b) + '</div>';
-    } else {
-      html += '<div class="soon">Soon</div>';
-    }
-    card.innerHTML = html;
-    if (!g.comingSoon) card.addEventListener("click", function(){ startGame(id); });
-    (g.comingSoon ? soon : live).appendChild(card);
-  });
-}
-
-function showStart(){
-  var g = E.def;
-  $("ovTitle").textContent = g.name;
-  $("ovText").textContent = g.how;
-  $("ovKeys").innerHTML = g.keys.map(function(k){ return '<span class="kbd">' + k + '</span>'; }).join("");
-  $("ovBig").style.display = "none";
-  var b = getBest(E.id);
-  $("ovBest").textContent = b === null ? "No best score yet" : "Best: " + g.fmt(b);
-  $("ovPlay").textContent = "Play";
-  $("overlay").classList.remove("hidden");
-}
-
-function play(){
-  if (!E.game) return;
-  $("overlay").classList.add("hidden");
-  if (E.game.reset) E.game.reset();
-  E.setScore(0);
-  E.running = true;
-  sfx(660, 0.12, "square", 0.1);
-}
-
-function disposeScene(){
-  if (!E.scene) return;
-  E.scene.traverse(function(o){
-    if (o.geometry) o.geometry.dispose();
-    if (o.material){
-      if (Array.isArray(o.material)) o.material.forEach(function(m){ m.dispose(); });
-      else o.material.dispose();
-    }
-  });
-  E.scene = null;
-  E.cam = null;
-  E.game = null;
-}
-
-function backToMenu(){
-  E.running = false;
-  disposeScene();
-  $("game").style.display = "none";
-  $("hub").style.display = "block";
-  window.scrollTo(0, 0);
-  renderHub();
-}
-
-function startGame(id){
-  var g = GAMES[id];
-  E.id = id;
-  E.def = g;
-  E.fmt = g.fmt;
-  E.lowerBetter = !!g.lowerBetter;
-  E.running = false;
-  E.score = 0;
-  E.keys = {};
-  disposeScene();
-  $("hub").style.display = "none";
-  $("game").style.display = "block";
-  $("hudName").textContent = g.name;
-  $("hudScore").textContent = g.fmt(0);
-  $("hudInfo").textContent = "";
-  var b = getBest(id);
-  $("hudBest").textContent = b === null ? "" : "Best: " + g.fmt(b);
-  E.cam = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 600);
-  E.game = g.create(E);
-  resize();
-  setupTouchUI(g);
-  showStart();
-}
-
-var isTouch = ("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0;
-function setupTouchUI(g){
-  var ui = $("touchUI");
-  if (!isTouch || !g.touch || (!g.touch.steer && !g.touch.act)){
-    ui.style.display = "none";
-    return;
-  }
-  ui.style.display = "flex";
-  $("steerGroup").style.display = g.touch.steer ? "flex" : "none";
-  $("actBtn").style.display = g.touch.act ? "block" : "none";
-  if (g.touch.act) $("actBtn").textContent = g.touch.act;
-}
-
-window.addEventListener("keydown", function(e){
-  if (!E.game) return;
-  var c = e.code;
-  if (c === "ArrowLeft" || c === "ArrowRight" || c === "ArrowUp" || c === "ArrowDown" || c === "Space") e.preventDefault();
-  if (!$("overlay").classList.contains("hidden")){
-    if (c === "Space" || c === "Enter") play();
-    return;
-  }
-  if (!E.running) return;
-  if (!E.keys[c]){
-    E.keys[c] = true;
-    if (!e.repeat && E.game.onKey) E.game.onKey(c, true);
-  }
-});
-window.addEventListener("keyup", function(e){
-  if (!E.game) return;
-  E.keys[e.code] = false;
-  if (E.running && E.game.onKey) E.game.onKey(e.code, false);
-});
-
-function dispatchPointer(type, cx, cy){
-  if (E.running && E.game && E.game.onPointer) E.game.onPointer(type, cx / window.innerWidth, cy / window.innerHeight);
-}
-var lastTouch = 0;
-canvas.addEventListener("touchstart", function(e){
-  lastTouch = Date.now();
-  e.preventDefault();
-  dispatchPointer("down", e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
-canvas.addEventListener("touchmove", function(e){
-  lastTouch = Date.now();
-  e.preventDefault();
-  dispatchPointer("move", e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
-canvas.addEventListener("touchend", function(e){
-  lastTouch = Date.now();
-  dispatchPointer("up", 0, 0);
-});
-canvas.addEventListener("mousedown", function(e){ if (Date.now() - lastTouch > 800) dispatchPointer("down", e.clientX, e.clientY); });
-canvas.addEventListener("mousemove", function(e){ if (Date.now() - lastTouch > 800) dispatchPointer("move", e.clientX, e.clientY); });
-window.addEventListener("mouseup", function(e){ if (Date.now() - lastTouch > 800) dispatchPointer("up", e.clientX, e.clientY); });
-
-var touchMap = { btnL: "ArrowLeft", btnR: "ArrowRight", actBtn: "Space" };
-Object.keys(touchMap).forEach(function(bid){
-  var code = touchMap[bid];
-  var el = $(bid);
-  function press(down, ev){
-    ev.preventDefault();
-    if (down){
-      if (!E.keys[code]){
-        E.keys[code] = true;
-        if (E.running && E.game && E.game.onKey) E.game.onKey(code, true);
-      }
-    } else {
-      if (E.keys[code]){
-        E.keys[code] = false;
-        if (E.running && E.game && E.game.onKey) E.game.onKey(code, false);
-      }
-    }
-  }
-  function tStart(ev){ lastTouch = Date.now(); press(true, ev); }
-  function tEnd(ev){ lastTouch = Date.now(); press(false, ev); }
-  function mStart(ev){ if (Date.now() - lastTouch > 800) press(true, ev); }
-  function mEnd(ev){ if (Date.now() - lastTouch > 800) press(false, ev); }
-  el.addEventListener("touchstart", tStart, { passive: false });
-  el.addEventListener("touchend", tEnd);
-  el.addEventListener("touchcancel", tEnd);
-  el.addEventListener("mousedown", mStart);
-  el.addEventListener("mouseup", mEnd);
-  el.addEventListener("mouseleave", mEnd);
-});
-
-$("ovPlay").addEventListener("click", play);
-$("ovMenu").addEventListener("click", backToMenu);
-$("exitBtn").addEventListener("click", backToMenu);
-
-var lastT = 0;
-function loop(t){
-  requestAnimationFrame(loop);
-  var dt = Math.min((t - lastT) / 1000, 0.05);
-  lastT = t;
-  if (E.scene && E.game && E.running && E.game.update) E.game.update(dt);
-  if (E.scene && E.cam) renderer.render(E.scene, E.cam);
-}
-
-function createSki(E){
-  var scene = newScene(0xbfe0f5, 30, 210);
-  E.scene = scene;
-  ground(scene, 600, 0xf2f7fc);
-
-  for (var m = 0; m < 8; m++){
-    var mt = new THREE.Mesh(new THREE.ConeGeometry(rand(14, 30), rand(18, 42), 6), mat(0xd7e6f2, 1));
-    mt.position.set(rand(-170, 170), 0, -160 - rand(0, 60));
-    scene.add(mt);
-  }
-
-  var player = new THREE.Group();
-  var skiL = box(0.28, 0.08, 1.9, 0xff5c5c, 0.6); skiL.position.set(-0.22, 0.05, 0);
-  var skiR = box(0.28, 0.08, 1.9, 0xff5c5c, 0.6); skiR.position.set(0.22, 0.05, 0);
-  var body = cyl(0.24, 0.3, 1.0, 0x2dd4a8); body.position.y = 0.95;
-  var head = ball(0.22, 0x1c2440, 0.5); head.position.y = 1.72;
-  player.add(skiL, skiR, body, head);
-  scene.add(player);
-
-  var N = 70;
-  var sGeo = new THREE.BufferGeometry();
-  var sPos = new Float32Array(N * 3);
-  var sVel = new Float32Array(N * 3);
-  sGeo.setAttribute("position", new THREE.BufferAttribute(sPos, 3));
-  var spray = new THREE.Points(sGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.16, transparent: true, opacity: 0.8 }));
-  scene.add(spray);
-  var si;
-  for (si = 0; si < N; si++){ sPos[si * 3 + 1] = -10; }
-
-  var px = 0, vx = 0, dist = 0, speed = 16, gateScore = 0, misses = 0, done = false;
-  var gates = [], trees = [], rowsSinceGate = 0, gateCount = 0, lastGateX = 0;
-
-  function makeGate(z, x){
-    var c = gateCount % 2 === 0 ? 0xff5c5c : 0x3aa0ff;
-    var g = new THREE.Group();
-    var p1 = cyl(0.05, 0.05, 1.7, c, 0.6); p1.position.set(-3.5, 0.85, 0);
-    var p2 = cyl(0.05, 0.05, 1.7, c, 0.6); p2.position.set(3.5, 0.85, 0);
-    var f1 = box(0.9, 0.5, 0.03, c, 0.6); f1.position.set(-3.1, 1.55, 0);
-    var f2 = box(0.9, 0.5, 0.03, c, 0.6); f2.position.set(3.1, 1.55, 0);
-    g.add(p1, p2, f1, f2);
-    g.position.set(x, 0, z);
-    scene.add(g);
-    gates.push({ g: g, x: x, counted: false });
-    gateCount++;
-  }
-
-  function makeTree(z){
-    var side = Math.random() < 0.5 ? -1 : 1;
-    var inner = Math.random() < 0.45;
-    var x = side * (inner ? rand(8, 18) : rand(28, 70));
-    if (inner){
-      for (var j = 0; j < gates.length; j++){
-        if (Math.abs(gates[j].g.position.z - z) < 7 && Math.abs(gates[j].x - x) < 5) return;
-      }
-    }
-    var t = new THREE.Group();
-    if (Math.random() < 0.25){
-      var rock = ball(rand(0.5, 0.9), 0x9aa5b1, 1);
-      rock.position.y = 0.4;
-      t.add(rock);
-      trees.push({ g: t, x: x, r: 0.9 });
-    } else {
-      var trunk = cyl(0.12, 0.16, 0.7, 0x6b4a2f, 1); trunk.position.y = 0.35;
-      var cone = new THREE.Mesh(new THREE.ConeGeometry(rand(0.8, 1.3), rand(2, 3.2), 7), mat(0x2f7d4f, 1));
-      cone.position.y = 1.9;
-      cone.castShadow = true;
-      t.add(trunk, cone);
-      trees.push({ g: t, x: x, r: 1.0 });
-    }
-    t.position.set(x, 0, z);
-    scene.add(t);
-  }
-
-  function nextGateX(){
-    lastGateX = clamp(lastGateX + rand(-9, 9), -12, 12);
-    return lastGateX;
-  }
-
-  function crash(reason){
-    if (done) return;
-    done = true;
-    E.message(reason);
-    sfx(120, 0.5, "sawtooth", 0.16, -60);
-    setTimeout(function(){ E.gameOver(Math.floor(dist) + gateScore); }, 900);
-  }
-
-  function reset(){
-    var i;
-    for (i = 0; i < gates.length; i++) scene.remove(gates[i].g);
-    for (i = 0; i < trees.length; i++) scene.remove(trees[i].g);
-    gates = [];
-    trees = [];
-    px = 0; vx = 0; dist = 0; speed = 16; gateScore = 0; misses = 0; done = false;
-    rowsSinceGate = 0; gateCount = 0; lastGateX = 0;
-    player.position.set(0, 0, 0);
-    player.rotation.z = 0;
-    makeGate(-40, 0);
-  }
-  reset();
-
-  function update(dt){
-    if (done) return;
-    speed = Math.min(40, 16 + dist * 0.015);
-    var steer = 0;
-    if (E.keys.ArrowLeft || E.keys.KeyA) steer -= 1;
-    if (E.keys.ArrowRight || E.keys.KeyD) steer += 1;
-    vx += steer * 46 * dt;
-    vx *= Math.max(0, 1 - 3.2 * dt);
-    px = clamp(px + vx * dt, -26, 26);
-    player.position.x = px;
-    player.rotation.z = clamp(-vx * 0.05, -0.5, 0.5);
-    dist += speed * dt;
-    var move = speed * dt;
-    var i, o;
-    for (i = gates.length - 1; i >= 0; i--){
-      o = gates[i];
-      o.g.position.z += move;
-      if (!o.counted && o.g.position.z > 0.5){
-        o.counted = true;
-        if (Math.abs(px - o.x) < 3.1){
-          gateScore += 10;
-          sfx(720, 0.09, "square", 0.1);
-        } else {
-          misses++;
-          sfx(180, 0.25, "sawtooth", 0.12, -60);
-          E.message("Missed gate " + misses + " of 3");
-          if (misses >= 3){ crash("Three gates missed"); return; }
-        }
-      }
-      if (o.g.position.z > 14){
-        scene.remove(o.g);
-        gates.splice(i, 1);
-      }
-    }
-    for (i = trees.length - 1; i >= 0; i--){
-      o = trees[i];
-      o.g.position.z += move;
-      if (Math.abs(o.g.position.z) < 1.2 && Math.abs(px - o.x) < o.r + 0.55){
-        crash("Crash!");
-        return;
-      }
-      if (o.g.position.z > 14){
-        scene.remove(o.g);
-        trees.splice(i, 1);
-      }
-    }
-    rowsSinceGate += move;
-    if (rowsSinceGate >= 7){
-      rowsSinceGate = 0;
-      var z = -150;
-      var lastG = gates.length ? gates[gates.length - 1].g.position.z : -999;
-      if (gates.length === 0 || lastG > -122){
-        makeGate(gates.length ? lastG - 28 : z, nextGateX());
-      } else if (Math.random() < 0.8){
-        makeTree(z + rand(-3, 3));
-        if (Math.random() < 0.5) makeTree(z + rand(-3, 3));
-      }
-    }
-    for (i = 0; i < N; i++){
-      var k = i * 3;
-      sVel[k + 1] -= 9.8 * dt;
-      sPos[k] += sVel[k] * dt;
-      sPos[k + 1] += sVel[k + 1] * dt;
-      sPos[k + 2] += sVel[k + 2] * dt;
-      if (sPos[k + 1] < 0){
-        sPos[k] = px + rand(-0.4, 0.4);
-        sPos[k + 1] = 0.05;
-        sPos[k + 2] = 0.8;
-        sVel[k] = rand(-1.5, 1.5) - vx * 0.4;
-        sVel[k + 1] = rand(1.5, 3.5);
-        sVel[k + 2] = rand(2, 5);
-      }
-    }
-    sGeo.attributes.position.needsUpdate = true;
-    E.cam.position.set(px * 0.55, 5.2, 10.5);
-    E.cam.fov = 62 + speed * 0.35;
-    E.cam.updateProjectionMatrix();
-    E.cam.lookAt(px * 0.7, 0.8, -14);
-    scene.userData.sun.position.set(px + 18, 36, 14);
-    E.setInfo(Math.round(speed * 3.6) + " km/h");
-    E.setScore(Math.floor(dist) + gateScore);
-  }
-
-  return { update: update, reset: reset };
-}
-
-function createPenalties(E){
-  var scene = newScene(0x0e1526, 25, 95);
-  E.scene = scene;
-  ground(scene, 120, 0x1f5c38);
-  var i;
-  for (i = 0; i < 9; i++){
-    var st = new THREE.Mesh(new THREE.PlaneGeometry(46, 2.2), mat(i % 2 ? 0x256e44 : 0x2a7c4c, 1));
-    st.rotation.x = -Math.PI / 2;
-    st.position.set(0, 0.01, -1 - i * 2.2);
-    st.receiveShadow = true;
-    scene.add(st);
-  }
-
-  var goal = new THREE.Group();
-  var postL = cyl(0.07, 0.07, 2.4, 0xffffff, 0.4); postL.position.set(-3.5, 1.2, 0);
-  var postR = cyl(0.07, 0.07, 2.4, 0xffffff, 0.4); postR.position.set(3.5, 1.2, 0);
-  var bar = cyl(0.07, 0.07, 7.14, 0xffffff, 0.4); bar.rotation.z = Math.PI / 2; bar.position.set(0, 2.4, 0);
-  var net = new THREE.Mesh(new THREE.PlaneGeometry(7, 2.4), new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.25 }));
-  net.position.set(0, 1.2, -0.6);
-  goal.add(postL, postR, bar, net);
-  goal.position.set(0, 0, -11);
-  scene.add(goal);
-
-  var keeper = new THREE.Group();
-  var kb = cyl(0.3, 0.34, 1.0, 0xf2c94c); kb.position.y = 1.05;
-  var kh = ball(0.21, 0xd9a066, 0.7); kh.position.y = 1.85;
-  var kaL = cyl(0.09, 0.09, 0.85, 0xf2c94c); kaL.position.set(-0.5, 1.35, 0); kaL.rotation.z = 0.9;
-  var kaR = cyl(0.09, 0.09, 0.85, 0xf2c94c); kaR.position.set(0.5, 1.35, 0); kaR.rotation.z = -0.9;
-  keeper.add(kb, kh, kaL, kaR);
-  keeper.position.set(0, 0, -10.4);
-  scene.add(keeper);
-
-  var bm = ball(0.22, 0xf5f5f5, 0.5);
-  bm.position.set(0, 0.22, 0);
-  scene.add(bm);
-  var ret = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.04, 8, 24), new THREE.MeshBasicMaterial({ color: 0xffb02e }));
-  ret.position.set(0, 1.2, -10.85);
-  scene.add(ret);
-
-  var aimX = 0, aimY = 1.2, charging = false, powerT = 0, power = 0;
-  var flying = false, bvx = 0, bvy = 0, bvz = 0, resolved = true, waitT = 0;
-  var shots = 0, goals = 0, diveT = -1, diveFrom = 0, diveTo = 0, tAcc = 0;
-  var dragging = false;
-
-  function shoot(){
-    charging = false;
-    E.power(null);
-    flying = true;
-    resolved = false;
-    var vz = -(14 + power * 10);
-    var t = 10.9 / -vz;
-    bvy = (aimY - 0.22) / t + 0.5 * 9.8 * t;
-    if (power > 0.85) bvy += (power - 0.85) * 16;
-    bvz = vz;
-    bvx = aimX / t;
-    var reads = Math.random() < 0.65;
-    diveFrom = keeper.position.x;
-    diveTo = reads ? clamp(aimX * 0.9 + rand(-0.5, 0.5), -2.9, 2.9) : (Math.random() < 0.5 ? -1 : 1) * rand(1.2, 2.8);
-    diveT = 0;
-    sfx(300, 0.15, "square", 0.14, 200);
-  }
-
-  function miss(txt){
-    resolved = true;
-    waitT = 1.0;
-    E.message(txt);
-    sfx(200, 0.25, "sawtooth", 0.12, -60);
-  }
-
-  function nextShot(){
-    shots++;
-    if (shots >= 5){ E.gameOver(goals); return; }
-    ballMReset();
-    E.setInfo("Shot " + (shots + 1) + " of 5");
-  }
-
-  function ballMReset(){
-    bm.position.set(0, 0.22, 0);
-    bvx = 0; bvy = 0; bvz = 0;
-    flying = false;
-    diveT = -1;
-    keeper.rotation.z = 0;
-  }
-
-  function reset(){
-    shots = 0; goals = 0; charging = false; resolved = true; dragging = false;
-    ballMReset();
-    keeper.position.x = 0;
-    E.setInfo("Shot 1 of 5");
-    E.power(null);
-    ret.position.set(0, 1.2, -10.85);
-  }
-  reset();
-
-  function update(dt){
-    tAcc += dt;
-    if (diveT < 0){
-      keeper.position.x = Math.sin(tAcc * 1.6) * 0.7;
-      keeper.rotation.z = 0;
-    } else {
-      diveT += dt;
-      var kk = Math.min(diveT / 0.45, 1);
-      keeper.position.x = diveFrom + (diveTo - diveFrom) * kk;
-      keeper.rotation.z = (diveTo > diveFrom ? -1 : 1) * 1.15 * kk;
-    }
-    if (!flying){
-      var mx = 0, my = 0;
-      if (E.keys.ArrowLeft || E.keys.KeyA) mx -= 1;
-      if (E.keys.ArrowRight || E.keys.KeyD) mx += 1;
-      if (E.keys.ArrowUp || E.keys.KeyW) my += 1;
-      if (E.keys.ArrowDown || E.keys.KeyS) my -= 1;
-      aimX = clamp(aimX + mx * 3.2 * dt, -3.3, 3.3);
-      aimY = clamp(aimY + my * 2.0 * dt, 0.25, 2.2);
-      ret.position.set(aimX, aimY, -10.85);
-      if (charging){
-        powerT += dt * 1.3;
-        var ph = powerT % 2;
-        power = ph < 1 ? ph : 2 - ph;
-        E.power(power);
-      }
-    } else {
-      var prevX = bm.position.x, prevY = bm.position.y, prevZ = bm.position.z;
-      bvy -= 9.8 * dt;
-      bm.position.x += bvx * dt;
-      bm.position.y += bvy * dt;
-      bm.position.z += bvz * dt;
-      bm.rotation.x -= 8 * dt;
-      if (bm.position.y < 0.22 && bvy < 0){ bm.position.y = 0.22; bvy = -bvy * 0.4; }
-      if (bm.position.z < -11.5){ bvz = 0; bvx = 0; }
-      if (!resolved && prevZ > -10.9 && bm.position.z <= -10.9){
-        var f = (prevZ + 10.9) / (prevZ - bm.position.z);
-        var cx = prevX + (bm.position.x - prevX) * f;
-        var cy = prevY + (bm.position.y - prevY) * f;
-        if (cy > 2.55){
-          miss("Over the bar!");
-          bvz = 2; bvy = -1;
-        } else if (Math.abs(cx) > 3.42 && Math.abs(cx) < 3.75 && cy < 2.5){
-          miss("Post!");
-          bvz = 4; bvx = -bvx * 0.5;
-        } else if (Math.abs(cx) >= 3.42){
-          miss("Wide!");
-          bvz = 2;
-        } else if (Math.abs(cx - keeper.position.x) < 1.0 && diveT > 0.2){
-          miss("Saved!");
-          bvz = 5; bvx = (cx > 0 ? 1 : -1) * 2; bvy = 2;
-        } else {
-          resolved = true;
-          goals++;
-          E.addScore(1);
-          waitT = 1.1;
-          E.message("Goal!");
-          sfx(880, 0.3, "square", 0.14, 200);
-        }
-      }
-      if (resolved){
-        waitT -= dt;
-        if (waitT <= 0) nextShot();
-      }
-    }
-    E.cam.position.set(0, 1.7, 3.6);
-    E.cam.lookAt(aimX * 0.5, 1.4, -11);
-  }
-
-  function onKey(code, down){
-    if (code === "Space"){
-      if (down){
-        if (!flying && !charging){ charging = true; powerT = 0; power = 0; }
-      } else if (charging){
-        shoot();
-      }
-    }
-  }
-
-  function onPointer(type, nx, ny){
-    if (flying) return;
-    if (type === "down") dragging = true;
-    if (type === "up") dragging = false;
-    if (dragging && type !== "up"){
-      aimX = clamp((nx - 0.5) * 9, -3.3, 3.3);
-      aimY = clamp(0.25 + (1 - ny) * 2.6, 0.25, 2.2);
-    }
-  }
-
-  return { update: update, reset: reset, onKey: onKey, onPointer: onPointer };
-}
-
-function createBasketball(E){
-  var scene = newScene(0x181326, 18, 70);
-  E.scene = scene;
-  ground(scene, 90, 0xc98d4e);
-  var ln;
-  ln = new THREE.Mesh(new THREE.BoxGeometry(26, 0.02, 0.12), mat(0xffffff, 0.6)); ln.position.set(0, 0.011, 2); scene.add(ln);
-  ln = new THREE.Mesh(new THREE.BoxGeometry(26, 0.02, 0.12), mat(0xffffff, 0.6)); ln.position.set(0, 0.011, -9.5); scene.add(ln);
-  ln = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.02, 11.5), mat(0xffffff, 0.6)); ln.position.set(-13, 0.011, -3.75); scene.add(ln);
-  ln = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.02, 11.5), mat(0xffffff, 0.6)); ln.position.set(13, 0.011, -3.75); scene.add(ln);
-
-  var hoop = new THREE.Group();
-  var pole = cyl(0.09, 0.09, 3.1, 0x5a6478, 0.5); pole.position.set(0, 1.55, -1.1);
-  var arm = box(0.12, 0.12, 1.0, 0x5a6478, 0.5); arm.position.set(0, 3.0, -0.6);
-  var board = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.1, 0.06), new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 }));
-  board.position.set(0, 3.05, -0.05);
-  board.castShadow = true;
-  var rim = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.045, 10, 24), mat(0xff5c5c, 0.5));
-  rim.rotation.x = Math.PI / 2;
-  rim.position.set(0, 2.6, 0.45);
-  var netM = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.55, 10, 1, true), new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.35 }));
-  netM.position.set(0, 2.32, 0.45);
-  hoop.add(pole, arm, board, rim, netM);
-  scene.add(hoop);
-
-  var bm = ball(0.24, 0xe8712a, 0.6);
-  scene.add(bm);
-
-  var Z = 6, waiting = true, charging = false, powerT = 0, power = 0;
-  var vx = 0, vy = 0, vz = 0, airT = 0, floorBounces = 0, rimHits = 0;
-  var scored = false, waitT = 0, missWait = false, streak = 0, timeLeft = 60, tAcc = 0;
-
-  function placeHoop(){
-    Z = rand(4.5, 7.5);
-    hoop.position.z = -Z;
-  }
-
-  function resetBall(){
-    waiting = true;
-    missWait = false;
-    charging = false;
-    bm.position.set(0, 1.05, 0);
-    vx = 0; vy = 0; vz = 0;
-    E.power(null);
-  }
-
-  function scoreBasket(){
-    scored = true;
-    var pts = Z > 6.3 ? 3 : 2;
-    streak++;
-    var mult = streak >= 4 ? 3 : streak >= 2 ? 2 : 1;
-    var total = pts * mult;
-    E.addScore(total);
-    E.message("+" + total + (mult > 1 ? "  x" + mult : "") + (pts === 3 ? "  Deep!" : ""));
-    sfx(760, 0.25, "square", 0.14, 260);
-    waitT = 0.9;
-    vy = -1;
-    vz *= 0.2;
-    vx *= 0.2;
-  }
-
-  function shoot(){
-    charging = false;
-    E.power(null);
-    var v = 6.5 + power * 5.5;
-    var th = 55 * Math.PI / 180;
-    vy = v * Math.sin(th);
-    vz = -v * Math.cos(th);
-    vx = (0 - bm.position.x) / (Z / (v * Math.cos(th)));
-    waiting = false;
-    airT = 0;
-    floorBounces = 0;
-    rimHits = 0;
-    scored = false;
-    sfx(240, 0.12, "square", 0.12, 160);
-  }
-
-  function reset(){
-    timeLeft = 60;
-    streak = 0;
-    scored = false;
-    waitT = 0;
-    placeHoop();
-    resetBall();
-  }
-  reset();
-
-  function update(dt){
-    tAcc += dt;
-    timeLeft -= dt;
-    if (timeLeft <= 0){
-      E.setScore(E.score);
-      E.gameOver(E.score);
-      return;
-    }
-    var mult = streak >= 4 ? 3 : streak >= 2 ? 2 : 1;
-    var s = Math.max(0, Math.ceil(timeLeft));
-    E.setInfo(Math.floor(s / 60) + ":" + ("0" + s % 60).slice(-2) + (streak >= 2 ? "  Streak x" + mult : ""));
-    if (waiting){
-      bm.position.set(Math.sin(tAcc * 1.7) * 2.6, 1.05, 0);
-      if (charging){
-        powerT += dt * 1.5;
-        var ph = powerT % 2;
-        power = ph < 1 ? ph : 2 - ph;
-        E.power(power);
-      }
-    } else {
-      airT += dt;
-      vy -= 9.8 * dt;
-      var prevY = bm.position.y;
-      bm.position.x += vx * dt;
-      bm.position.y += vy * dt;
-      bm.position.z += vz * dt;
-      bm.rotation.x += 6 * dt;
-      bm.rotation.z += 3 * dt;
-      var rimZ = -Z + 0.45;
-      if (!scored && prevY > 2.6 && bm.position.y <= 2.6 && vy < 0){
-        var dx = bm.position.x;
-        var dz = bm.position.z - rimZ;
-        var d = Math.sqrt(dx * dx + dz * dz);
-        if (d < 0.4){
-          scoreBasket();
-        } else if (d < 0.62 && rimHits < 2){
-          rimHits++;
-          vy = Math.abs(vy) * 0.35 + 1.2;
-          vx += dx * 6;
-          vz += dz * 6;
-          sfx(500, 0.08, "square", 0.1);
-          E.message("Rim!");
-        }
-      }
-      var boardZ = -Z - 0.05;
-      if (bm.position.z < boardZ + 0.24 && bm.position.z > boardZ - 0.4 && vz < 0 && Math.abs(bm.position.x) < 0.95 && bm.position.y > 2.5 && bm.position.y < 3.6){
-        bm.position.z = boardZ + 0.24;
-        vz = -vz * 0.45;
-        sfx(180, 0.08, "square", 0.1);
-      }
-      if (bm.position.y < 0.24 && vy < 0){
-        bm.position.y = 0.24;
-        vy = -vy * 0.55;
-        vx *= 0.8;
-        vz *= 0.8;
-        floorBounces++;
-      }
-      if (scored){
-        waitT -= dt;
-        if (waitT <= 0){
-          placeHoop();
-          resetBall();
-        }
-      } else if (!missWait && (floorBounces >= 2 || airT > 2.5)){
-        missWait = true;
-        streak = 0;
-        waitT = 0.5;
-        E.message("Miss");
-        sfx(160, 0.2, "sawtooth", 0.1, -40);
-      } else if (missWait){
-        waitT -= dt;
-        if (waitT <= 0) resetBall();
-      }
-    }
-    E.cam.position.set(0, 2.5, 4.8);
-    E.cam.lookAt(0, 2.3, -Z);
-  }
-
-  function onKey(code, down){
-    if (code === "Space"){
-      if (down){
-        if (waiting && !charging){ charging = true; powerT = 0; power = 0; }
-      } else if (charging){
-        shoot();
-      }
-    }
-  }
-
-  return { update: update, reset: reset, onKey: onKey };
-}
-
-function createSprint(E){
-  var scene = newScene(0x9fd8ef, 40, 180);
-  E.scene = scene;
-  var track = new THREE.Mesh(new THREE.PlaneGeometry(150, 9), mat(0xb03a3a, 1));
-  track.rotation.x = -Math.PI / 2;
-  track.receiveShadow = true;
-  scene.add(track);
-  var grass1 = new THREE.Mesh(new THREE.PlaneGeometry(150, 30), mat(0x3f9d4f, 1));
-  grass1.rotation.x = -Math.PI / 2;
-  grass1.position.set(0, -0.02, 19.5);
-  scene.add(grass1);
-  var grass2 = grass1.clone();
-  grass2.position.z = -19.5;
-  scene.add(grass2);
-  var i;
-  for (i = 0; i <= 4; i++){
-    var ln = new THREE.Mesh(new THREE.BoxGeometry(150, 0.02, 0.08), mat(0xffffff, 0.6));
-    ln.position.set(0, 0.011, -3.6 + i * 1.8);
-    scene.add(ln);
-  }
-  var finish = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.02, 9), mat(0xffffff, 0.5));
-  finish.position.set(100, 0.012, 0);
-  scene.add(finish);
-  for (i = 0; i < 14; i++){
-    var tc = new THREE.Mesh(new THREE.ConeGeometry(rand(0.7, 1.2), rand(1.8, 3), 7), mat(0x2f7d4f, 1));
-    tc.position.set(rand(-10, 118), 1.2, (Math.random() < 0.5 ? -1 : 1) * rand(8, 16));
-    scene.add(tc);
-  }
-
-  var hurdles = [];
-  for (i = 0; i < 10; i++){
-    var h = new THREE.Group();
-    var pl = cyl(0.035, 0.035, 0.85, 0x2f7d4f, 0.6); pl.position.set(0, 0.425, -0.7);
-    var pr = cyl(0.035, 0.035, 0.85, 0x2f7d4f, 0.6); pr.position.set(0, 0.425, 0.7);
-    var bar = box(0.06, 0.07, 1.5, 0xf2f2f2, 0.5); bar.position.y = 0.83;
-    h.add(pl, pr, bar);
-    h.position.x = 20 + i * 8.5;
-    scene.add(h);
-    hurdles.push({ g: h, x: 20 + i * 8.5, hit: false, tip: 0 });
-  }
-
-  var runner = new THREE.Group();
-  var torso = box(0.42, 0.62, 0.28, 0x2dd4a8); torso.position.y = 1.12;
-  var head = ball(0.17, 0xe8b58a, 0.7); head.position.y = 1.62;
-  var legL = new THREE.Group();
-  var legLm = cyl(0.07, 0.07, 0.72, 0x1c2440, 0.7); legLm.position.y = -0.36;
-  legL.add(legLm);
-  legL.position.set(0, 0.82, -0.12);
-  var legR = new THREE.Group();
-  var legRm = cyl(0.07, 0.07, 0.72, 0x1c2440, 0.7); legRm.position.y = -0.36;
-  legR.add(legRm);
-  legR.position.set(0, 0.82, 0.12);
-  var armL = new THREE.Group();
-  var armLm = cyl(0.05, 0.05, 0.55, 0x2dd4a8, 0.7); armLm.position.y = -0.27;
-  armL.add(armLm);
-  armL.position.set(0, 1.38, -0.26);
-  var armR = new THREE.Group();
-  var armRm = cyl(0.05, 0.05, 0.55, 0x2dd4a8, 0.7); armRm.position.y = -0.27;
-  armR.add(armRm);
-  armR.position.set(0, 1.38, 0.26);
-  runner.add(torso, head, legL, legR, armL, armR);
-  scene.add(runner);
-
-  var x = 0, y = 0, vy = 0, speed = 0, lastSide = "", phase = 0, elapsed = 0, finished = false;
-
-  function onKey(code, down){
-    if (!down || finished) return;
-    if (code === "ArrowLeft" || code === "KeyA"){
-      speed = Math.min(10.5, speed + (lastSide === "L" ? 0.08 : 0.55));
-      lastSide = "L";
-      sfx(440 + Math.random() * 80, 0.04, "square", 0.05);
-    } else if (code === "ArrowRight" || code === "KeyD"){
-      speed = Math.min(10.5, speed + (lastSide === "R" ? 0.08 : 0.55));
-      lastSide = "R";
-      sfx(480 + Math.random() * 80, 0.04, "square", 0.05);
-    } else if (code === "Space" || code === "ArrowUp" || code === "KeyW"){
-      if (y <= 0.001){
-        vy = 6.2;
-        sfx(300, 0.1, "square", 0.08, 120);
-      }
-    }
-  }
-
-  function reset(){
-    x = 0; y = 0; vy = 0; speed = 0; lastSide = ""; phase = 0; elapsed = 0; finished = false;
-    runner.position.set(0, 0, 0);
-    runner.rotation.set(0, 0, 0);
-    for (var j = 0; j < hurdles.length; j++){
-      hurdles[j].hit = false;
-      hurdles[j].tip = 0;
-      hurdles[j].g.rotation.z = 0;
-    }
-    E.cam.position.set(4.5, 2.7, 11);
-    E.cam.lookAt(4.5, 1.1, 0);
-    E.setInfo("0m");
-  }
-  reset();
-
-  function update(dt){
-    if (finished) return;
-    elapsed += dt;
-    speed = Math.max(0, speed - 1.8 * dt);
-    vy -= 20 * dt;
-    y += vy * dt;
-    if (y < 0){ y = 0; vy = 0; }
-    x += speed * dt;
-    phase += speed * dt * 2.2;
-    runner.position.set(x, y, 0);
-    runner.rotation.z = clamp(-speed * 0.012, -0.15, 0);
-    var sw = Math.sin(phase);
-    legL.rotation.x = sw * 0.95;
-    legR.rotation.x = -sw * 0.95;
-    armL.rotation.x = -sw * 0.8;
-    armR.rotation.x = sw * 0.8;
-    var j, h;
-    for (j = 0; j < hurdles.length; j++){
-      h = hurdles[j];
-      if (h.hit){
-        h.tip = Math.min(h.tip + dt * 3.5, 1.35);
-        h.g.rotation.z = -h.tip;
-        continue;
-      }
-      if (Math.abs(x - h.x) < 0.45 && y < 0.85){
-        h.hit = true;
-        speed *= 0.4;
-        E.message("Hurdle down!");
-        sfx(140, 0.3, "sawtooth", 0.14, -50);
-      }
-    }
-    if (x >= 100){
-      finished = true;
-      var t = Math.round(elapsed * 100) / 100;
-      E.setScore(t);
-      sfx(700, 0.3, "square", 0.14, 250);
-      setTimeout(function(){ E.gameOver(t); }, 400);
-      return;
-    }
-    E.cam.position.set(x + 4.5, 2.7, 11);
-    E.cam.lookAt(x + 4.5, 1.1, 0);
-    scene.userData.sun.position.set(x + 20, 36, 14);
-    E.setInfo(Math.min(100, Math.floor(x)) + "m");
-    E.setScore(elapsed);
-  }
-
-  return { update: update, reset: reset, onKey: onKey };
-}
-
-renderHub();
-resize();
-requestAnimationFrame(loop);
-</script>
+<script src="sa-core.js"></script>
+<script src="sa-net.js"></script>
+<script src="g-ski.js"></script>
 </body>
 </html>
+
