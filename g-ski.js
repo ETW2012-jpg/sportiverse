@@ -156,7 +156,7 @@ function buildSlide(E, cfg){
       it = live[i];
       it.g.position.z = it.ev.d - dist;
       z = it.g.position.z;
-      if (it.ev.t === "g" && !it.ev.done && z > 0.5 && !done){
+      if (it.ev.t === "g" && !it.ev.done && z < -0.5 && !done){
         it.ev.done = true;
         if (Math.abs(px - it.ev.x) < diff.gap){
           score += 10;
