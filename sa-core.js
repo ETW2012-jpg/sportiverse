@@ -289,6 +289,7 @@ function backToMenu(){
     return;
   }
   disposeScene();
+  $("lobby").classList.add("hidden");
   $("game").style.display = "none";
   $("hub").style.display = "block";
   window.scrollTo(0, 0);
@@ -424,6 +425,13 @@ actBtn.addEventListener("touchcancel", function(e){ actPress(false, e); });
 actBtn.addEventListener("mousedown", function(e){ if (Date.now() - lastTouch > 800) actPress(true, e); });
 actBtn.addEventListener("mouseup", function(e){ if (Date.now() - lastTouch > 800) actPress(false, e); });
 
+$("ovPlay").addEventListener("click", function(){
+  if (typeof SA.ovAction === "function") SA.ovAction();
+});
+$("ovMenu").addEventListener("click", function(){
+  backToMenu();
+});
+
 $("exitBtn").addEventListener("click", function(){
   if (NET.inRoom && E.running){
     E.running = false;
@@ -443,7 +451,9 @@ function loop(t){
     var ky = (E.keys.ArrowDown ? -1 : 0) + (E.keys.ArrowUp ? 1 : 0);
     E.stick.x = clamp(jx + kx, -1, 1);
     E.stick.y = clamp(jy + ky, -1, 1);
-    if (E.game.update) E.game.update(dt);
+    if (E.game.update){
+      try { E.game.update(dt); } catch(e){ console.error("Update error:", e); }
+    }
   }
   if (E.scene && E.cam) renderer.render(E.scene, E.cam);
 }
