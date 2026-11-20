@@ -91,8 +91,8 @@
   #actBtn:active { background: rgba(45,212,168,0.4); }
 
   #overlay, #lobby {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    background: rgba(6,9,18,0.72); backdrop-filter: blur(6px); z-index: 5; padding: 20px;
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(6,9,18,0.72); backdrop-filter: blur(6px); z-index: 50; padding: 20px;
   }
   #overlay.hidden, #lobby.hidden { display: none; }
   .panel {
@@ -178,56 +178,56 @@
     <div id="stickZone"><div id="stickKnob"></div></div>
     <button id="actBtn">GO</button>
   </div>
+</div>
 
-  <div id="overlay">
-    <div class="panel">
-      <h2 id="ovTitle"></h2>
-      <div class="ptext" id="ovText"></div>
-      <div class="keysrow" id="ovKeys"></div>
-      <div id="ovOpts"></div>
-      <div class="pbig" id="ovBig" style="display:none"></div>
-      <div class="pbest" id="ovBest"></div>
-      <div class="pbtns">
-        <button class="pbtn main" id="ovPlay">Play</button>
-        <button class="pbtn ghost" id="ovMenu">Menu</button>
-      </div>
+<div id="overlay" class="hidden">
+  <div class="panel">
+    <h2 id="ovTitle"></h2>
+    <div class="ptext" id="ovText"></div>
+    <div class="keysrow" id="ovKeys"></div>
+    <div id="ovOpts"></div>
+    <div class="pbig" id="ovBig" style="display:none"></div>
+    <div class="pbest" id="ovBest"></div>
+    <div class="pbtns">
+      <button class="pbtn main" id="ovPlay">Play</button>
+      <button class="pbtn ghost" id="ovMenu">Menu</button>
     </div>
   </div>
+</div>
 
-  <div id="lobby" class="hidden">
-    <div class="panel">
-      <h2 id="lbTitle">Multiplayer</h2>
-      <div id="lbStep1">
-        <div class="lrow"><label>Your name</label><input id="lbName" maxlength="12" placeholder="e.g. Sam"></div>
-        <div class="lrow" id="lbCodeRow" style="display:none"><label>Room code</label><input id="lbCodeIn" maxlength="5" placeholder="ABC12" autocapitalize="characters"></div>
-        <div class="pbtns">
-          <button class="pbtn main" id="lbGo">Go</button>
-          <button class="pbtn ghost" id="lbCancel">Cancel</button>
-        </div>
-        <div class="pbest" id="lbErr"></div>
+<div id="lobby" class="hidden">
+  <div class="panel">
+    <h2 id="lbTitle">Multiplayer</h2>
+    <div id="lbStep1">
+      <div class="lrow"><label>Your name</label><input id="lbName" maxlength="12" placeholder="e.g. Sam"></div>
+      <div class="lrow" id="lbCodeRow" style="display:none"><label>Room code</label><input id="lbCodeIn" maxlength="5" placeholder="ABC12" autocapitalize="characters"></div>
+      <div class="pbtns">
+        <button class="pbtn main" id="lbGo">Go</button>
+        <button class="pbtn ghost" id="lbCancel">Cancel</button>
       </div>
-      <div id="lbStep2" style="display:none">
-        <div class="ptext">Share this code with your friends:</div>
-        <div id="lbCode">-----</div>
-        <div id="lbPlayers"></div>
-        <div id="lbHostTools">
-          <div class="selrow"><label>Game</label><select id="lbGame" class="sel"></select></div>
-          <div id="lbOpts"></div>
-        </div>
-        <div class="ptext" id="lbWait" style="display:none">Waiting for the host to start the game.</div>
-        <div class="mpnote">Everyone keeps this page open. Connects through a free peer server - the first connection can take a few seconds. If the host leaves, the room closes.</div>
-        <div class="pbtns">
-          <button class="pbtn main" id="lbStart">Start</button>
-          <button class="pbtn ghost" id="lbLeave">Leave room</button>
-        </div>
+      <div class="pbest" id="lbErr"></div>
+    </div>
+    <div id="lbStep2" style="display:none">
+      <div class="ptext">Share this code with your friends:</div>
+      <div id="lbCode">-----</div>
+      <div id="lbPlayers"></div>
+      <div id="lbHostTools">
+        <div class="selrow"><label>Game</label><select id="lbGame" class="sel"></select></div>
+        <div id="lbOpts"></div>
+      </div>
+      <div class="ptext" id="lbWait" style="display:none">Waiting for the host to start the game.</div>
+      <div class="mpnote">Everyone keeps this page open. Connects through a free peer server - the first connection can take a few seconds. If the host leaves, the room closes.</div>
+      <div class="pbtns">
+        <button class="pbtn main" id="lbStart">Start</button>
+        <button class="pbtn ghost" id="lbLeave">Leave room</button>
       </div>
     </div>
   </div>
 </div>
 
-<script src="sa-core.js?v=2"></script>
-<script src="sa-net.js?v=2"></script>
-<script src="g-ski.js?v=2"></script>
+<script src="sa-core.js?v=3"></script>
+<script src="sa-net.js?v=3"></script>
+<script src="g-ski.js?v=3"></script>
 <script>
 if (!window.SA || !SA.games || !SA.games.ski){
   document.getElementById("liveGrid").innerHTML = '<div class="card"><h3>Still loading</h3><p>If nothing appears in a few seconds, refresh the page or check the internet connection.</p></div>';
