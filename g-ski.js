@@ -257,6 +257,7 @@ function buildSlide(E, cfg){
     if (Math.abs(ax) < 0.08) ax = 0;
     var onG = y <= 0.001;
     if (onG){
+      vy = 0;
       vx += ax * 42 * dt;
       vx *= Math.max(0, 1 - 3.0 * dt);
       px = SA.clamp(px + vx * dt, -26, 26);
@@ -268,9 +269,10 @@ function buildSlide(E, cfg){
       spinVel *= Math.max(0, 1 - 0.4 * dt);
       spinTotal += spinVel * dt;
       if (E.stick.y < -0.45) grabT += dt;
+      vy -= 20 * dt;
+      y += vy * dt;
+      if (y <= 0.001) y = 0;
     }
-    vy -= 20 * dt;
-    y += vy * dt;
     if (y <= 0.001 && air){
       y = 0;
       vy = 0;
