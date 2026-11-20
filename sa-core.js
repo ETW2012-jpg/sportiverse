@@ -449,7 +449,10 @@ function loop(t){
 }
 
 SA.games = {};
-SA.register = function(def){ SA.games[def.id] = def; };
+SA.register = function(def){
+  SA.games[def.id] = def;
+  if (typeof renderHub === "function") renderHub();
+};
 SA.E = E;
 SA.fmtInt = fmtInt;
 SA.fmtTime = fmtTime;
