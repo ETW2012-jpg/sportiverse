@@ -2,9 +2,9 @@
 (function(){
 var SA = window.SA;
 var DIFFS = {
-  Green: { cap: 26, base: 13, grade: 0.008, gap: 4.2, sMin: 26, sMax: 34, trees: 0.55, len: 1100 },
-  Blue:  { cap: 33, base: 16, grade: 0.010, gap: 3.7, sMin: 24, sMax: 32, trees: 0.9, len: 1400 },
-  Black: { cap: 40, base: 19, grade: 0.012, gap: 3.2, sMin: 22, sMax: 30, trees: 1.35, len: 1700 }
+  Green: { cap: 26, base: 13, grade: 0.008, gap: 4.2, sMin: 26, sMax: 34, trees: 0.7, len: 1100 },
+  Blue:  { cap: 33, base: 16, grade: 0.010, gap: 3.7, sMin: 24, sMax: 32, trees: 1.05, len: 1400 },
+  Black: { cap: 40, base: 19, grade: 0.012, gap: 3.2, sMin: 22, sMax: 30, trees: 1.5, len: 1700 }
 };
 var MAPS = {
   "Sun Peaks":  { sky: 0xbfe0f5, fogN: 30, fogF: 210, snow: 0xf2f7fc, tree: 0x2f7d4f, rock: 0x9aa5b1, night: false, mountains: true },
@@ -17,6 +17,16 @@ function buildSlide(E, cfg){
   var scene = SA.newScene(map.sky, map.fogN, map.fogF);
   E.scene = scene;
   SA.ground(scene, 700, map.snow);
+  var piste = new THREE.Mesh(new THREE.BoxGeometry(46, 0.06, diff.len + 160), SA.mat(0xd9e5f3, 1));
+    piste.position.set(0, 0.01, -(diff.len / 2) + 40);
+    piste.receiveShadow = true;
+    scene.add(piste);
+    var cord, cords = [-14, 0, 14];
+    for (var ci = 0; ci < 3; ci++){
+      cord = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.015, diff.len + 160), SA.mat(0xc3d4e8, 1));
+      cord.position.set(cords[ci], 0.045, -(diff.len / 2) + 40);
+      scene.add(cord);
+    }
   if (map.night){
     scene.children[0].intensity = 0.45;
     scene.children[1].intensity = 0.55;
@@ -59,10 +69,10 @@ function buildSlide(E, cfg){
 
   var gateP = pool(function(){
     var g = new THREE.Group();
-    var p1 = SA.cyl(0.05, 0.05, 1.7, 0xff5c5c, 0.6); p1.position.set(-3.5, 0.85, 0);
-    var p2 = SA.cyl(0.05, 0.05, 1.7, 0xff5c5c, 0.6); p2.position.set(3.5, 0.85, 0);
-    var f1 = SA.box(0.9, 0.5, 0.03, 0xff5c5c, 0.6); f1.position.set(-3.1, 1.55, 0);
-    var f2 = SA.box(0.9, 0.5, 0.03, 0xff5c5c, 0.6); f2.position.set(3.1, 1.55, 0);
+    var p1 = SA.cyl(0.05, 0.05, 2.3, 0xff5c5c, 0.6); p1.position.set(-3.5, 1.15, 0);
+    var p2 = SA.cyl(0.05, 0.05, 2.3, 0xff5c5c, 0.6); p2.position.set(3.5, 1.15, 0);
+    var f1 = SA.box(1.3, 0.7, 0.03, 0xff5c5c, 0.6); f1.position.set(-2.9, 2.0, 0);
+    var f2 = SA.box(1.3, 0.7, 0.03, 0xff5c5c, 0.6); f2.position.set(2.9, 2.0, 0);
     g.add(p1, p2, f1, f2);
     g.userData.parts = [p1, p2, f1, f2];
     return g;
@@ -85,11 +95,18 @@ function buildSlide(E, cfg){
   });
   var kickP = pool(function(){
     var g = new THREE.Group();
-    var k = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.24, 3.4), SA.mat(0xffb02e, 0.5));
-    k.rotation.x = -0.24;
-    k.position.y = 0.22;
+    var k = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.34, 4.6), SA.mat(0xffb02e, 0.5));
+    k.rotation.x = -0.28;
+    k.position.y = 0.26;
     k.castShadow = true;
     g.add(k);
+    return g;
+  });
+  var markP = pool(function(){
+    var g = new THREE.Group();
+    var p = SA.cyl(0.045, 0.045, 1.4, 0xff8a3d, 0.6); p.position.y = 0.7;
+    var fl = SA.box(0.55, 0.36, 0.02, 0xff8a3d, 0.6); fl.position.set(0.28, 1.22, 0);
+    g.add(p, fl);
     return g;
   });
   var lampP = pool(function(){
@@ -107,16 +124,16 @@ function buildSlide(E, cfg){
     live = [];
     gateIdx = 0;
     var r = E.rand;
-    var d = 60;
+    var d = 30;
     var lastX = 0;
     while (d < diff.len){
       lastX = SA.clamp(lastX + (r() - 0.5) * 16, -11, 11);
       events.push({ t: "g", d: d, x: lastX, c: gateIdx % 2 === 0 ? 0xff5c5c : 0x3aa0ff });
       gateIdx++;
       var until = d + diff.sMin + r() * (diff.sMax - diff.sMin);
-      if (r() < 0.3){
+      if (r() < 0.7){
         var kx = SA.clamp(lastX + (r() - 0.5) * 12, -13, 13);
-        if (Math.abs(kx - lastX) > 5.5) events.push({ t: "k", d: d + (until - d) * 0.4, x: kx });
+        if (Math.abs(kx - lastX) > 2.0) events.push({ t: "k", d: d + (until - d) * 0.25, x: kx });
       }
       var cl = Math.floor(diff.trees * 3 * r());
       for (var q = 0; q < cl; q++){
@@ -131,20 +148,25 @@ function buildSlide(E, cfg){
         events.push({ t: "l", d: d + 6, x: -26 });
         events.push({ t: "l", d: d + 6, x: 26 });
       }
+      for (var s2 = 8; s2 < until - d; s2 += 14){
+        events.push({ t: "m", d: d + s2, x: -23 });
+        events.push({ t: "m", d: d + s2, x: 23 });
+      }
       d = until;
     }
+    events.sort(function(a, b){ return a.d - b.d; });
   }
 
   function spawnUpTo(){
     while (evIdx < events.length && events[evIdx].d - dist < 175){
       var ev = events[evIdx++];
-      var p2l = ev.t === "g" ? gateP : ev.t === "k" ? kickP : ev.t === "t" ? (ev.rock ? rockP : treeP) : lampP;
+      var p2l = ev.t === "g" ? gateP : ev.t === "k" ? kickP : ev.t === "t" ? (ev.rock ? rockP : treeP) : ev.t === "m" ? markP : lampP;
       var g = p2l.free.pop() || p2l.make();
       if (ev.t === "t") g.scale.setScalar(ev.s);
       if (ev.t === "g"){
         g.userData.parts.forEach(function(part){ part.material.color.setHex(ev.c); });
       }
-      g.position.set(ev.x, 0, ev.d - dist);
+      g.position.set(ev.x, 0, dist - ev.d);
       scene.add(g);
       live.push({ ev: ev, g: g, pool: p2l });
     }
@@ -154,9 +176,9 @@ function buildSlide(E, cfg){
     var i, it, z;
     for (i = live.length - 1; i >= 0; i--){
       it = live[i];
-      it.g.position.z = it.ev.d - dist;
+      it.g.position.z = dist - it.ev.d;
       z = it.g.position.z;
-      if (it.ev.t === "g" && !it.ev.done && z < -0.5 && !done){
+      if (it.ev.t === "g" && !it.ev.done && z > 0.5 && !done){
         it.ev.done = true;
         if (Math.abs(px - it.ev.x) < diff.gap){
           score += 10;
@@ -168,9 +190,9 @@ function buildSlide(E, cfg){
           else { stopRun("Three gates missed"); return; }
         }
       }
-      if (it.ev.t === "k" && !it.ev.done && Math.abs(z) < 1.5 && Math.abs(px - it.ev.x) < 1.3 && y <= 0.01){
+      if (it.ev.t === "k" && !it.ev.done && Math.abs(z) < 2.2 && Math.abs(px - it.ev.x) < 1.8 && y <= 0.01){
         it.ev.done = true;
-        vy = 8.4;
+        vy = 9.6;
         spinVel = 0;
         air = true;
         airT = 0;
@@ -250,7 +272,23 @@ function buildSlide(E, cfg){
       ghostsUp();
       return;
     }
-    if (done) return;
+    if (done){
+      if (y > 0.001 || vy > 0){
+        vy -= 20 * dt;
+        y += vy * dt;
+        if (y <= 0.001){
+          y = 0;
+          vy = 0;
+          air = false;
+          spinTotal = 0;
+          spinVel = 0;
+          grabT = 0;
+          player.rotation.x = 0;
+          player.rotation.y = 0;
+        }
+      }
+      return;
+    }
     elapsed += dt;
     speed = Math.min(diff.cap, diff.base + dist * diff.grade);
     var ax = E.stick.x;
@@ -373,7 +411,7 @@ function buildSlide(E, cfg){
 
   function onKey(code, down){
     if (code === "Space" && down && y <= 0.001 && !done && !waiting){
-      vy = 5.6;
+      vy = 6.4;
       air = true;
       airT = 0;
       spinVel = 0;
@@ -396,7 +434,7 @@ SA.register({
   id: "ski",
   name: "Alpine Ski",
   tag: "Pick your mountain and slope, race friends, spin and grab in the air.",
-  how: "Joystick to steer. JUMP for air, then flick the joystick for spins and pull it back for grabs - land straight or you crash. Pass gates for +10. Miss 3 gates, crash, or land badly and the run ends. Reach the finish line for +150.",
+  how: "Joystick to steer. Pass the red and blue gates for +10. Hit orange kicker ramps or press JUMP for air, then flick the joystick for spins and hold it back for grabs - land straight or you crash. Miss 3 gates, crash, or land badly and the run ends. Finish line pays +150.",
   keys: ["Joystick steer", "JUMP button"],
   touch: { stick: true, act: "JUMP" },
   fmt: SA.fmtInt,
