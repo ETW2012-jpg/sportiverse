@@ -255,9 +255,10 @@ function buildSlide(E, cfg){
     speed = Math.min(diff.cap, diff.base + dist * diff.grade);
     var ax = E.stick.x;
     if (Math.abs(ax) < 0.08) ax = 0;
-    var onG = y <= 0.001;
+    var onG = y <= 0.001 && vy <= 0;
     if (onG){
       vy = 0;
+      y = 0;
       vx += ax * 42 * dt;
       vx *= Math.max(0, 1 - 3.0 * dt);
       px = SA.clamp(px + vx * dt, -26, 26);
